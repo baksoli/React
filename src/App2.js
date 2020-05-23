@@ -63,6 +63,12 @@ function App2()
             console.log(res.data)
         })
     },[])
+
+    // 이벤트
+    // 이벤트는 function 안에 있어야 한다.
+    const handleChange=(e)=>{
+        console.log(e.target.value);
+    }
     //console.log(music);
     // render()
     // for() if()
@@ -98,7 +104,9 @@ function App2()
             <table className={"table"}>
                 <tr>
                     <td>
-                        <input type={"text"} className={"input-sm"} size={"25"}/>
+                        <input type={"text"} className={"input-sm"} size={"25"}
+                        onChange={handleChange}
+                        />
                     </td>
                 </tr>
             </table>
