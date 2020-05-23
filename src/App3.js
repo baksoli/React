@@ -1,5 +1,7 @@
 import React, {useState, useEffect, useCallback, useMemo} from "react";
 import axios from "axios";
+
+// 함수형 컴포넌트 - useState, useEffect, useCallback, useMemo
 //container
 
 function App3(){
@@ -13,10 +15,15 @@ function App3(){
             setMusic(res.data);
         })
     }, []) // mount할 때만 실행 => componentDidMount, componentDidUpdate
+    // 이벤트 등록
+    const handleUserInput=useCallback((ss)=>{
+        setSs(ss);
+    },[ss]) //,[ss] ss가 변경될 경우에만 호출. 
+    // ss : 입력한 단어 => ss가 변경될 때만 호출
     return (
         <div className={"row"}>
-            <H/>
-            <SearchBar/>
+            <H2/>
+            <SearchBar ss={ss} onUserInput={handleUserInput}/>
             <div sytle={{"height":"30px"}}></div>
             <MusicTable music1={music} ss={ss}/>
         </div>
@@ -29,6 +36,11 @@ function App3(){
     n=0
     var k = s.indexOf(k)
     k=-1
+
+ */
+/*
+    CallBack : 함수의 주소 기억.
+    Memo : 함수의 리턴형을 기억.
 
  */
 function MusicTable(props){
@@ -70,28 +82,45 @@ function MusicRow(props){
     )
 }
 
-function SearchBar(){
+function SearchBar(props){
     //useCallback
+    const onChange=(e)=>{
+        props.onUserInput(e.target.value); //App3
+    }
     return (
         <table className={"table"}>
             <tr>
                 <td>
-                    <input type={"text"} size={"25"} className={"input-sm"} placeholder={"Search"}/>
+                    <input type={"text"} size={"25"} className={"input-sm"} placeholder={"Search"}
+                           onChange={onChange} value={props.ss}/>
                 </td>
             </tr>
         </table>
     )
 }
-//useMemo
+
 const H=()=>{
-    //memo
+
+    const color=["red","blue","green","yellow","pink"];
+    const no=parseInt(Math.random()*5);
+    // Math.random() => 0.0 ~ 0.99 => 5*0.0=>0.0 ~ 0.99*5 ==> 4.9999
+    // -> parseInt -> 0~4 random 출력
     return (
-        <h1 className={"text-center"}>Music Top 50</h1>
+        <h1 className={"text-center"} style={{"color":color[no]}}>Music Top 50</h1>
     )
 }
-
-const H2=()=>{
-
-}
+//useMemo
+//반복으로 동일한 데이터를 가져올 경우 memo 사용
+//주로 header, footer
+const H2=React.memo(()=>{
+    //memo
+    const color=["red","blue","green","yellow","pink"];
+    const no=parseInt(Math.random()*5);
+    // Math.random() => 0.0 ~ 0.99 => 5*0.0=>0.0 ~ 0.99*5 ==> 4.9999
+    // -> parseInt -> 0~4 random 출력
+    return (
+        <h1 className={"text-center"} style={{"color":color[no]}}>Music Top 50</h1>
+    )
+});
 
 export default App3;
